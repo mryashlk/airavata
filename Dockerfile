@@ -33,11 +33,28 @@ RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/bi
 ENV MAVEN_HOME=/opt/maven
 ENV PATH="${MAVEN_HOME}/bin:${PATH}"
 
-# Install Apache Thrift (required for code generation)
+# Install Apache Thrift compiler (required for code generation)
+# Only build the compiler, disable all language libraries to avoid dependency issues
 ARG THRIFT_VERSION=0.22.0
 RUN curl -fsSL https://archive.apache.org/dist/thrift/${THRIFT_VERSION}/thrift-${THRIFT_VERSION}.tar.gz | tar xzf - -C /tmp && \
     cd /tmp/thrift-${THRIFT_VERSION} && \
-    ./configure --disable-tests --disable-tutorial && \
+    ./configure \
+        --disable-tests \
+        --disable-tutorial \
+        --disable-libs \
+        --without-cpp \
+        --without-python \
+        --without-py3 \
+        --without-java \
+        --without-go \
+        --without-nodejs \
+        --without-ruby \
+        --without-perl \
+        --without-php \
+        --without-csharp \
+        --without-erlang \
+        --without-haskell \
+        --without-d && \
     make -j$(nproc) && \
     make install && \
     cd / && \
