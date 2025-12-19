@@ -9,15 +9,39 @@
 # =============================================================================
 FROM eclipse-temurin:17-jdk-jammy AS builder
 
-# Install Maven 3.9.x (project requires Maven 3.8+)
+# Install build dependencies (Maven 3.9.x and Apache Thrift)
 ARG MAVEN_VERSION=3.9.9
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | tar xzf - -C /opt && \
-    ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    curl \
+    automake \
+    bison \
+    flex \
+    g++ \
+    git \
+    libboost-all-dev \
+    libevent-dev \
+    libssl-dev \
+    libtool \
+    make \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Maven
+RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | tar xzf - -C /opt && \
+    ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven
 
 ENV MAVEN_HOME=/opt/maven
 ENV PATH="${MAVEN_HOME}/bin:${PATH}"
+
+# Install Apache Thrift (required for code generation)
+ARG THRIFT_VERSION=0.22.0
+RUN curl -fsSL https://archive.apache.org/dist/thrift/${THRIFT_VERSION}/thrift-${THRIFT_VERSION}.tar.gz | tar xzf - -C /tmp && \
+    cd /tmp/thrift-${THRIFT_VERSION} && \
+    ./configure --disable-tests --disable-tutorial && \
+    make -j$(nproc) && \
+    make install && \
+    cd / && \
+    rm -rf /tmp/thrift-${THRIFT_VERSION}
 
 # Set working directory for build
 WORKDIR /build
