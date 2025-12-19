@@ -1,5 +1,150 @@
-.devcontainer
-.github
-.idea
-.run
-.vscode
+# =============================================================================
+# Docker Ignore File - Excludes unnecessary files from Docker build context
+# =============================================================================
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# Build outputs (will be built inside Docker)
+target/
+distribution/
+*.tar.gz
+*.zip
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.log
+
+# Docker files (avoid recursion)
+.dockerignore
+docker-compose.yml
+docker-compose*.yml
+
+# Documentation and media (not needed for build)
+*.md
+README*
+INSTALL
+DEPLOY
+NOTICE
+LICENSE
+RELEASE_NOTES
+CITATION.cff
+logo.txt
+docs/
+assets/
+examples/
+
+# Dev tools - SDKs not needed for Java build
+dev-tools/airavata-php-sdk/
+dev-tools/airavata-python-sdk/
+dev-tools/ansible/
+dev-tools/amqpwstunnel/
+dev-tools/job-status-rest-server/
+dev-tools/simstream/
+dev-tools/batch_launch_experiments.py
+dev-tools/create_launch_experiment_with_storage.py
+
+# Keep deployment-scripts (needed for docker-startup.sh)
+!dev-tools/deployment-scripts/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+venv/
+env/
+ENV/
+.venv
+
+# Node/NPM (if any)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+.npm
+.eslintcache
+
+# Go build artifacts
+vendor/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Test outputs and coverage
+test-output/
+coverage/
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+.hypothesis/
+*.cover
+.mypy_cache/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
+.cache/
+
+# Maven specific (will download fresh in Docker)
+.mvn/
+mvnw
+mvnw.cmd
+
+# Thrift generated files (will be regenerated)
+thrift-interface-descriptions/generate-thrift-stubs.sh
+
+# Release migration scripts (not needed for build)
+modules/release-migration-scripts/
+
+# Keep these important files
+!apache-license-header*.txt
+!pom.xml

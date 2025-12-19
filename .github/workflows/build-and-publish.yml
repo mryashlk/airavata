@@ -2,13 +2,13 @@ name: Build and Push Airavata Docker Image
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, mutli-stage-docker ]
     tags: [ "v*" ]
   workflow_dispatch:
 
 env:
   DOCKER_HUB_REGISTRY: docker.io
-  DOCKER_HUB_REPO: cybershuttle
+  DOCKER_HUB_REPO: mryash
   DOCKER_HUB_IMAGE: airavata
 
 jobs:
