@@ -9,10 +9,15 @@
 # =============================================================================
 FROM eclipse-temurin:17-jdk-jammy AS builder
 
-# Install Maven
-RUN apt-get update && apt-get install -y \
-    maven \
-    && rm -rf /var/lib/apt/lists/*
+# Install Maven 3.9.x (project requires Maven 3.8+)
+ARG MAVEN_VERSION=3.9.9
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | tar xzf - -C /opt && \
+    ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV MAVEN_HOME=/opt/maven
+ENV PATH="${MAVEN_HOME}/bin:${PATH}"
 
 # Set working directory for build
 WORKDIR /build
